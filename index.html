@@ -25,6 +25,17 @@
             pointer-events: none;
         }
 
+        /* 新增星空动画 */
+        @keyframes starDrift {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(-50vw, -50vh) rotate(360deg); }
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
         .container {
             position: relative;
             z-index: 2;
@@ -202,27 +213,35 @@
     </div>
 
     <script>
-        // 星空背景
+        // 增强的星空动画
         function createStars() {
             const container = document.getElementById('stars');
-            for(let i = 0; i < 150; i++) {
+            const starCount = 200; // 增加星星数量
+            
+            for(let i = 0; i < starCount; i++) {
                 const star = document.createElement('div');
+                const size = Math.random() * 3;
+                const duration = 20 + Math.random() * 30; // 随机动画时长
+                const delay = Math.random() * -20; // 随机动画延迟
+
                 star.style.cssText = `
                     position: absolute;
-                    left: ${Math.random() * 100}%;
-                    top: ${Math.random() * 100}%;
-                    width: ${Math.random() * 3}px;
-                    height: ${Math.random() * 3}px;
+                    left: ${Math.random() * 150}%;
+                    top: ${Math.random() * 150}%;
+                    width: ${size}px;
+                    height: ${size}px;
                     background: white;
                     border-radius: 50%;
                     opacity: ${Math.random()};
-                    animation: twinkle ${2 + Math.random() * 3}s infinite;
+                    animation: 
+                        twinkle ${2 + Math.random() * 3}s infinite,
+                        starDrift ${duration}s linear ${delay}s infinite;
                 `;
                 container.appendChild(star);
             }
         }
 
-        // 数字时钟
+        // 更新时间
         function updateTime() {
             const now = new Date();
             const timeString = now.toLocaleTimeString('zh-CN', {
@@ -235,7 +254,7 @@
                 timeString.split('').map(c => `<span>${c}</span>`).join('');
         }
 
-        // 模拟时钟
+        // 更新模拟时钟
         function updateAnalogClock() {
             const now = new Date();
             const hours = now.getHours() % 12;
