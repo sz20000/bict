@@ -25,7 +25,6 @@
             pointer-events: none;
         }
 
-        /* 新增星空动画 */
         @keyframes starDrift {
             0% { transform: translate(0, 0) rotate(0deg); }
             100% { transform: translate(-50vw, -50vh) rotate(360deg); }
@@ -152,19 +151,34 @@
             animation: progress 2s infinite linear;
         }
 
-        .contact-btn {
-            display: inline-block;
-            padding: 12px 30px;
-            margin-top: 2rem;
-            background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
-            color: white;
-            text-decoration: none;
-            border-radius: 30px;
-            font-size: 1.1rem;
-            font-weight: 500;
+        .contact-icons {
+            display: flex;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .icon-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
             transition: all 0.3s ease;
             border: 1px solid rgba(255,255,255,0.3);
-            box-shadow: 0 0 20px rgba(0,242,254,0.2);
+        }
+
+        .icon-link:hover {
+            background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 0 20px rgba(0,242,254,0.4);
+        }
+
+        .icon-link svg {
+            width: 24px;
+            height: 24px;
+            fill: white;
         }
 
         @keyframes progress {
@@ -181,9 +195,17 @@
                 font-size: 1em;
                 top: 60%;
             }
-            .contact-btn {
-                padding: 10px 25px;
-                font-size: 1rem;
+            .contact-icons {
+                gap: 1.5rem;
+                margin-top: 2rem;
+            }
+            .icon-link {
+                width: 45px;
+                height: 45px;
+            }
+            .icon-link svg {
+                width: 20px;
+                height: 20px;
             }
         }
     </style>
@@ -207,22 +229,30 @@
             <div class="progress"></div>
         </div>
 
-        <a href="mailto:info@bict.cn" class="contact-btn">
-            联系我们
-        </a>
+        <div class="contact-icons">
+            <a href="tel:+8675582119898" class="icon-link" title="拨打联系电话">
+                <svg viewBox="0 0 24 24">
+                    <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                </svg>
+            </a>
+            <a href="mailto:info@bict.cn" class="icon-link" title="发送电子邮件">
+                <svg viewBox="0 0 24 24">
+                    <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                </svg>
+            </a>
+        </div>
     </div>
 
     <script>
-        // 增强的星空动画
         function createStars() {
             const container = document.getElementById('stars');
-            const starCount = 200; // 增加星星数量
+            const starCount = 200;
             
             for(let i = 0; i < starCount; i++) {
                 const star = document.createElement('div');
                 const size = Math.random() * 3;
-                const duration = 20 + Math.random() * 30; // 随机动画时长
-                const delay = Math.random() * -20; // 随机动画延迟
+                const duration = 20 + Math.random() * 30;
+                const delay = Math.random() * -20;
 
                 star.style.cssText = `
                     position: absolute;
@@ -241,7 +271,6 @@
             }
         }
 
-        // 更新时间
         function updateTime() {
             const now = new Date();
             const timeString = now.toLocaleTimeString('zh-CN', {
@@ -254,7 +283,6 @@
                 timeString.split('').map(c => `<span>${c}</span>`).join('');
         }
 
-        // 更新模拟时钟
         function updateAnalogClock() {
             const now = new Date();
             const hours = now.getHours() % 12;
@@ -276,7 +304,6 @@
             requestAnimationFrame(updateAnalogClock);
         }
 
-        // 初始化
         function init() {
             createStars();
             updateTime();
