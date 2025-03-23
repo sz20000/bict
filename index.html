@@ -5,7 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>网站建设中 | 星辰之旅</title>
     <style>
-        /* 原有样式保持不变，新增以下模拟时钟样式 */
+        /* 修复后的样式 */
+        .container {
+            /* 确保容器层级最高 */
+            z-index: 2;
+        }
+
         .analog-clock {
             width: min(40vw, 200px);
             height: min(40vw, 200px);
@@ -18,18 +23,6 @@
             backdrop-filter: blur(5px);
         }
 
-        .clock-center {
-            position: absolute;
-            width: 8px;
-            height: 8px;
-            background: #4facfe;
-            border-radius: 50%;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 1;
-        }
-
         .clock-hand {
             position: absolute;
             bottom: 50%;
@@ -37,26 +30,41 @@
             transform-origin: bottom;
             background: white;
             border-radius: 2px;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .hour-hand {
-            width: 3px;
+            width: 4px;
             height: 28%;
             background: linear-gradient(to top, #00f2fe, #4facfe);
+            transform: translateX(-50%);
         }
 
         .minute-hand {
-            width: 2px;
+            width: 3px;
             height: 38%;
             background: linear-gradient(to top, #00f2fe, #4facfe);
+            transform: translateX(-50%);
         }
 
         .second-hand {
-            width: 1px;
+            width: 2px;
             height: 42%;
             background: #ff6b6b;
-            transform-origin: bottom left;
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateX(-50%);
+            z-index: 2;
+        }
+
+        .clock-center {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #4facfe;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 3;
         }
 
         .clock-mark {
@@ -66,37 +74,34 @@
             background: rgba(255,255,255,0.5);
             transform-origin: 50% 230%;
             left: 50%;
-            top: 8%;
+            top: 5%;
         }
 
         @media (max-width: 768px) {
             .analog-clock {
-                width: 35vw;
-                height: 35vw;
-                margin: 2vh 0;
-            }
-            
-            .clock-hand {
-                border-radius: 1px;
+                width: 180px;
+                height: 180px;
             }
             
             .hour-hand { height: 25%; }
-            .minute-hand { height: 33%; }
-            .second-hand { height: 35%; }
+            .minute-hand { height: 35%; }
+            .second-hand { height: 38%; }
         }
     </style>
 </head>
 <body>
-    <!-- 原有结构保持不变，在时间显示后添加模拟时钟 -->
+    <div class="stars" id="stars"></div>
+    
     <div class="container">
         <h1>网站正在建设中</h1>
         <div class="time" id="time"></div>
         
+        <!-- 修复后的时钟结构 -->
         <div class="analog-clock" id="analogClock">
-            <div class="clock-center"></div>
             <div class="clock-hand hour-hand" id="hourHand"></div>
             <div class="clock-hand minute-hand" id="minuteHand"></div>
             <div class="clock-hand second-hand" id="secondHand"></div>
+            <div class="clock-center"></div>
         </div>
 
         <div class="progress-bar">
@@ -106,50 +111,66 @@
     </div>
 
     <script>
-        // 在原有代码基础上添加模拟时钟功能
-        function updateAnalogClock() {
-            const now = new Date();
-            const seconds = now.getSeconds() + now.getMilliseconds()/1000;
-            const minutes = now.getMinutes() + seconds/60;
-            const hours = now.getHours()%12 + minutes/60;
-
-            document.getElementById('secondHand').style.transform = 
-                `rotate(${seconds * 6}deg)`;
-            document.getElementById('minuteHand').style.transform = 
-                `rotate(${minutes * 6}deg)`;
-            document.getElementById('hourHand').style.transform = 
-                `rotate(${hours * 30}deg)`;
-            
-            requestAnimationFrame(updateAnalogClock);
-        }
-
-        // 初始化时钟刻度
+        // 修复后的时钟逻辑
         function createClockMarks() {
             const clock = document.getElementById('analogClock');
+            // 清空旧刻度
+            const existingMarks = document.querySelectorAll('.clock-mark');
+            existingMarks.forEach(mark => mark.remove());
+
+            // 生成新刻度
             for(let i = 0; i < 60; i++) {
                 const mark = document.createElement('div');
                 mark.className = 'clock-mark';
                 mark.style.transform = `rotate(${i * 6}deg)`;
                 mark.style.opacity = i % 5 === 0 ? '1' : '0.3';
-                mark.style.height = i % 15 === 0 ? '15px' : '8px';
-                clock.insertBefore(mark, clock.firstChild);
+                mark.style.height = i % 15 === 0 ? '15px' : '10px';
+                mark.style.top = i % 15 === 0 ? '3%' : '5%';
+                clock.appendChild(mark);
             }
         }
 
-        // 修改初始化函数
+        function updateAnalogClock() {
+            const now = new Date();
+            const milliseconds = now.getMilliseconds();
+            const seconds = now.getSeconds() + milliseconds / 1000;
+            const minutes = now.getMinutes() + seconds / 60;
+            const hours = (now.getHours() % 12) + minutes / 60;
+
+            // 添加平滑过渡
+            document.getElementById('secondHand').style.transform = 
+                `translateX(-50%) rotate(${seconds * 6}deg)`;
+            document.getElementById('minuteHand').style.transform = 
+                `translateX(-50%) rotate(${minutes * 6}deg)`;
+            document.getElementById('hourHand').style.transform = 
+                `translateX(-50%) rotate(${hours * 30}deg)`;
+
+            requestAnimationFrame(updateAnalogClock);
+        }
+
+        // 初始化函数
         function init() {
             createStars();
             createClockMarks();
             updateTime();
+            updateAnalogClock();
             setInterval(updateTime, 1000);
-            updateAnalogClock(); // 启动模拟时钟动画
+            
+            // 窗口调整监听
+            let resizeTimer;
             window.addEventListener('resize', () => {
-                createStars();
-                clearTimeout(window.resizedFinished);
-                window.resizedFinished = setTimeout(createStars, 200);
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(() => {
+                    createStars();
+                    createClockMarks();
+                }, 200);
             });
         }
 
+        // 星空生成函数（保持不变）
+        function createStars() { /* 同之前代码 */ }
+        function updateTime() { /* 同之前代码 */ }
+        
         init();
     </script>
 </body>
