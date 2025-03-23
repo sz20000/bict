@@ -2,9 +2,16 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>网站建设中 | 星辰之旅</title>
     <style>
+        :root {
+            --base-size: 1vw;
+            --desktop: 1200px;
+            --tablet: 768px;
+            --mobile: 480px;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -14,7 +21,7 @@
         body {
             min-height: 100vh;
             background: linear-gradient(45deg, #000428, #00294d);
-            font-family: 'Arial', sans-serif;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             overflow: hidden;
             position: relative;
         }
@@ -36,46 +43,50 @@
             min-height: 100vh;
             color: white;
             text-align: center;
-            padding: 20px;
+            padding: 5vw;
         }
 
         h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-            letter-spacing: 2px;
+            font-size: clamp(2rem, 8vw, 4rem);
+            margin-bottom: 3vh;
+            letter-spacing: 0.05em;
             text-shadow: 0 0 15px rgba(255,255,255,0.5);
+            line-height: 1.2;
         }
 
         .time {
-            font-size: 2.5rem;
+            font-size: clamp(1.5rem, 6vw, 3rem);
             font-family: 'Courier New', monospace;
-            margin: 2rem 0;
+            margin: 4vh 0;
+            display: flex;
+            gap: 0.2em;
+        }
+
+        .time span {
+            display: inline-block;
             animation: heartbeat 1.2s infinite;
-            position: relative;
-            padding: 15px 30px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 10px;
-            backdrop-filter: blur(5px);
+            text-shadow: 0 0 10px rgba(255,255,255,0.3);
+            transform-origin: center bottom;
         }
 
         @keyframes heartbeat {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
         }
 
         .status {
-            max-width: 600px;
+            max-width: 80ch;
             margin: 0 auto;
             line-height: 1.6;
             color: #ddd;
+            font-size: clamp(0.875rem, 2.5vw, 1.125rem);
         }
 
         .progress-bar {
-            width: 300px;
-            height: 4px;
+            width: min(80vw, 400px);
+            height: 3px;
             background: rgba(255,255,255,0.2);
-            margin: 2rem 0;
+            margin: 4vh 0;
             border-radius: 2px;
             overflow: hidden;
         }
@@ -84,31 +95,39 @@
             width: 45%;
             height: 100%;
             background: linear-gradient(90deg, #00f2fe, #4facfe);
-            animation: progress 2s infinite;
+            animation: progress 2s infinite linear;
         }
 
         @keyframes progress {
             0% { transform: translateX(-100%); }
-            100% { transform: translateX(300%); }
+            100% { transform: translateX(250%); }
         }
 
-        .decor-line {
+        .star {
             position: absolute;
-            width: 80px;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #fff, transparent);
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 2s infinite;
         }
 
-        .decor-line.top {
-            top: 20%;
-            left: 50%;
-            transform: translateX(-50%);
+        @media (max-width: 768px) {
+            .time { margin: 3vh 0; }
+            .progress-bar { margin: 3vh 0; }
+            @keyframes heartbeat {
+                0%, 100% { transform: scale(1); }
+                50% { transform: scale(1.1); }
+            }
         }
 
-        .decor-line.bottom {
-            bottom: 20%;
-            left: 50%;
-            transform: translateX(-50%);
+        @media (max-width: 480px) {
+            h1 { font-size: 2rem; }
+            .time { gap: 0.1em; }
+            .progress { animation-duration: 1.5s; }
+            .star { animation-duration: 3s; }
+        }
+
+        @media (hover: none) {
+            .star { animation: twinkle 3s infinite; }
         }
     </style>
 </head>
@@ -116,38 +135,35 @@
     <div class="stars" id="stars"></div>
     
     <div class="container">
-        <div class="decor-line top"></div>
-        
         <h1>网站正在建设中</h1>
         <div class="time" id="time"></div>
         <div class="progress-bar">
             <div class="progress"></div>
         </div>
-        <p class="status">我们正在全速构建这个星辰世界，预计将于2024年第四季度完成部署。<br>请留下您的联系方式，获取最新进展。</p>
-        
-        <div class="decor-line bottom"></div>
+        <p class="status">我们正在全速构建这个星辰世界，预计将于2024年第四季度完成部署</p>
     </div>
 
     <script>
-        // 创建星空背景
+        // 响应式星空生成
         function createStars() {
-            const stars = document.getElementById('stars');
-            for (let i = 0; i < 150; i++) {
+            const container = document.getElementById('stars');
+            const starCount = window.innerWidth < 768 ? 80 : 150;
+            
+            container.innerHTML = '';
+            for (let i = 0; i < starCount; i++) {
                 const star = document.createElement('div');
-                star.style.position = 'absolute';
+                star.className = 'star';
                 star.style.left = Math.random() * 100 + '%';
                 star.style.top = Math.random() * 100 + '%';
-                star.style.width = Math.random() * 3 + 'px';
-                star.style.height = star.style.width;
-                star.style.backgroundColor = 'white';
-                star.style.borderRadius = '50%';
-                star.style.opacity = Math.random();
-                star.style.animation = `twinkle ${2 + Math.random() * 3}s infinite`;
-                stars.appendChild(star);
+                const size = window.innerWidth < 480 ? 1 : Math.random() * 3;
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                star.style.animationDuration = (2 + Math.random() * 3) + 's';
+                container.appendChild(star);
             }
         }
 
-        // 更新时间显示
+        // 自适应时间显示
         function updateTime() {
             const now = new Date();
             const timeString = now.toLocaleTimeString('zh-CN', {
@@ -156,31 +172,24 @@
                 minute: '2-digit',
                 second: '2-digit'
             });
-            document.getElementById('time').textContent = timeString;
+            document.getElementById('time').innerHTML = 
+                timeString.split('').map(c => `<span>${c}</span>`).join('');
         }
 
-        // 星空闪烁动画
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes twinkle {
-                0%, 100% { opacity: ${Math.random() * 0.7}; }
-                50% { opacity: ${Math.random() * 0.2}; }
-            }
-        `;
-        document.head.appendChild(style);
-
         // 初始化
-        createStars();
-        setInterval(updateTime, 1000);
-        updateTime();
+        function init() {
+            createStars();
+            updateTime();
+            setInterval(updateTime, 1000);
+            window.addEventListener('resize', () => {
+                createStars();
+                clearTimeout(window.resizedFinished);
+                window.resizedFinished = setTimeout(createStars, 200);
+            });
+        }
 
-        // 添加视差效果
-        document.addEventListener('mousemove', (e) => {
-            const x = e.clientX / window.innerWidth - 0.5;
-            const y = e.clientY / window.innerHeight - 0.5;
-            document.querySelector('.container').style.transform = 
-                `translate(${x * 20}px, ${y * 20}px)`;
-        });
+        // 启动
+        init();
     </script>
 </body>
 </html>
