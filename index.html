@@ -3,12 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>网站建设中 | 星辰之旅</title>
+    <title>网站建设中 | BICT</title>
     <style>
-        /* 修复后的完整样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             min-height: 100vh;
-            margin: 0;
             background: linear-gradient(45deg, #000428, #00294d);
             font-family: Arial, sans-serif;
             overflow: hidden;
@@ -137,6 +141,21 @@
             animation: progress 2s infinite linear;
         }
 
+        .contact-btn {
+            display: inline-block;
+            padding: 12px 30px;
+            margin-top: 2rem;
+            background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.3);
+            box-shadow: 0 0 20px rgba(0,242,254,0.2);
+        }
+
         @keyframes progress {
             0% { transform: translateX(-100%); }
             100% { transform: translateX(250%); }
@@ -150,6 +169,10 @@
             .logo-text {
                 font-size: 1em;
                 top: 60%;
+            }
+            .contact-btn {
+                padding: 10px 25px;
+                font-size: 1rem;
             }
         }
     </style>
@@ -172,14 +195,16 @@
         <div class="progress-bar">
             <div class="progress"></div>
         </div>
-        <p class="status">我们正在全速构建这个星辰世界，预计将于2024年第四季度完成部署</p>
+
+        <a href="mailto:info@bict.cn" class="contact-btn">
+            联系我们
+        </a>
     </div>
 
     <script>
-        // 修复后的完整功能
+        // 星空背景
         function createStars() {
             const container = document.getElementById('stars');
-            container.innerHTML = '';
             for(let i = 0; i < 150; i++) {
                 const star = document.createElement('div');
                 star.style.cssText = `
@@ -197,6 +222,7 @@
             }
         }
 
+        // 数字时钟
         function updateTime() {
             const now = new Date();
             const timeString = now.toLocaleTimeString('zh-CN', {
@@ -209,6 +235,7 @@
                 timeString.split('').map(c => `<span>${c}</span>`).join('');
         }
 
+        // 模拟时钟
         function updateAnalogClock() {
             const now = new Date();
             const hours = now.getHours() % 12;
@@ -230,6 +257,7 @@
             requestAnimationFrame(updateAnalogClock);
         }
 
+        // 初始化
         function init() {
             createStars();
             updateTime();
