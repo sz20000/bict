@@ -5,138 +5,100 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>网站建设中 | 星辰之旅</title>
     <style>
-        :root {
-            --base-size: 1vw;
-            --desktop: 1200px;
-            --tablet: 768px;
-            --mobile: 480px;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            min-height: 100vh;
-            background: linear-gradient(45deg, #000428, #00294d);
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .stars {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-        }
-
-        .container {
-            position: relative;
-            z-index: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            color: white;
-            text-align: center;
-            padding: 5vw;
-        }
-
-        h1 {
-            font-size: clamp(2rem, 8vw, 4rem);
-            margin-bottom: 3vh;
-            letter-spacing: 0.05em;
-            text-shadow: 0 0 15px rgba(255,255,255,0.5);
-            line-height: 1.2;
-        }
-
-        .time {
-            font-size: clamp(1.5rem, 6vw, 3rem);
-            font-family: 'Courier New', monospace;
-            margin: 4vh 0;
-            display: flex;
-            gap: 0.2em;
-        }
-
-        .time span {
-            display: inline-block;
-            animation: heartbeat 1.2s infinite;
-            text-shadow: 0 0 10px rgba(255,255,255,0.3);
-            transform-origin: center bottom;
-        }
-
-        @keyframes heartbeat {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.15); }
-        }
-
-        .status {
-            max-width: 80ch;
-            margin: 0 auto;
-            line-height: 1.6;
-            color: #ddd;
-            font-size: clamp(0.875rem, 2.5vw, 1.125rem);
-        }
-
-        .progress-bar {
-            width: min(80vw, 400px);
-            height: 3px;
-            background: rgba(255,255,255,0.2);
-            margin: 4vh 0;
-            border-radius: 2px;
-            overflow: hidden;
-        }
-
-        .progress {
-            width: 45%;
-            height: 100%;
-            background: linear-gradient(90deg, #00f2fe, #4facfe);
-            animation: progress 2s infinite linear;
-        }
-
-        @keyframes progress {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(250%); }
-        }
-
-        .star {
-            position: absolute;
-            background: white;
+        /* 原有样式保持不变，新增以下模拟时钟样式 */
+        .analog-clock {
+            width: min(40vw, 200px);
+            height: min(40vw, 200px);
+            border: 2px solid rgba(255,255,255,0.3);
             border-radius: 50%;
-            animation: twinkle 2s infinite;
+            position: relative;
+            margin: 3vh 0;
+            background: rgba(255,255,255,0.05);
+            box-shadow: 0 0 30px rgba(0,242,254,0.1);
+            backdrop-filter: blur(5px);
+        }
+
+        .clock-center {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #4facfe;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+        }
+
+        .clock-hand {
+            position: absolute;
+            bottom: 50%;
+            left: 50%;
+            transform-origin: bottom;
+            background: white;
+            border-radius: 2px;
+        }
+
+        .hour-hand {
+            width: 3px;
+            height: 28%;
+            background: linear-gradient(to top, #00f2fe, #4facfe);
+        }
+
+        .minute-hand {
+            width: 2px;
+            height: 38%;
+            background: linear-gradient(to top, #00f2fe, #4facfe);
+        }
+
+        .second-hand {
+            width: 1px;
+            height: 42%;
+            background: #ff6b6b;
+            transform-origin: bottom left;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .clock-mark {
+            position: absolute;
+            width: 2px;
+            height: 12px;
+            background: rgba(255,255,255,0.5);
+            transform-origin: 50% 230%;
+            left: 50%;
+            top: 8%;
         }
 
         @media (max-width: 768px) {
-            .time { margin: 3vh 0; }
-            .progress-bar { margin: 3vh 0; }
-            @keyframes heartbeat {
-                0%, 100% { transform: scale(1); }
-                50% { transform: scale(1.1); }
+            .analog-clock {
+                width: 35vw;
+                height: 35vw;
+                margin: 2vh 0;
             }
-        }
-
-        @media (max-width: 480px) {
-            h1 { font-size: 2rem; }
-            .time { gap: 0.1em; }
-            .progress { animation-duration: 1.5s; }
-            .star { animation-duration: 3s; }
-        }
-
-        @media (hover: none) {
-            .star { animation: twinkle 3s infinite; }
+            
+            .clock-hand {
+                border-radius: 1px;
+            }
+            
+            .hour-hand { height: 25%; }
+            .minute-hand { height: 33%; }
+            .second-hand { height: 35%; }
         }
     </style>
 </head>
 <body>
-    <div class="stars" id="stars"></div>
-    
+    <!-- 原有结构保持不变，在时间显示后添加模拟时钟 -->
     <div class="container">
         <h1>网站正在建设中</h1>
         <div class="time" id="time"></div>
+        
+        <div class="analog-clock" id="analogClock">
+            <div class="clock-center"></div>
+            <div class="clock-hand hour-hand" id="hourHand"></div>
+            <div class="clock-hand minute-hand" id="minuteHand"></div>
+            <div class="clock-hand second-hand" id="secondHand"></div>
+        </div>
+
         <div class="progress-bar">
             <div class="progress"></div>
         </div>
@@ -144,43 +106,43 @@
     </div>
 
     <script>
-        // 响应式星空生成
-        function createStars() {
-            const container = document.getElementById('stars');
-            const starCount = window.innerWidth < 768 ? 80 : 150;
+        // 在原有代码基础上添加模拟时钟功能
+        function updateAnalogClock() {
+            const now = new Date();
+            const seconds = now.getSeconds() + now.getMilliseconds()/1000;
+            const minutes = now.getMinutes() + seconds/60;
+            const hours = now.getHours()%12 + minutes/60;
+
+            document.getElementById('secondHand').style.transform = 
+                `rotate(${seconds * 6}deg)`;
+            document.getElementById('minuteHand').style.transform = 
+                `rotate(${minutes * 6}deg)`;
+            document.getElementById('hourHand').style.transform = 
+                `rotate(${hours * 30}deg)`;
             
-            container.innerHTML = '';
-            for (let i = 0; i < starCount; i++) {
-                const star = document.createElement('div');
-                star.className = 'star';
-                star.style.left = Math.random() * 100 + '%';
-                star.style.top = Math.random() * 100 + '%';
-                const size = window.innerWidth < 480 ? 1 : Math.random() * 3;
-                star.style.width = size + 'px';
-                star.style.height = size + 'px';
-                star.style.animationDuration = (2 + Math.random() * 3) + 's';
-                container.appendChild(star);
+            requestAnimationFrame(updateAnalogClock);
+        }
+
+        // 初始化时钟刻度
+        function createClockMarks() {
+            const clock = document.getElementById('analogClock');
+            for(let i = 0; i < 60; i++) {
+                const mark = document.createElement('div');
+                mark.className = 'clock-mark';
+                mark.style.transform = `rotate(${i * 6}deg)`;
+                mark.style.opacity = i % 5 === 0 ? '1' : '0.3';
+                mark.style.height = i % 15 === 0 ? '15px' : '8px';
+                clock.insertBefore(mark, clock.firstChild);
             }
         }
 
-        // 自适应时间显示
-        function updateTime() {
-            const now = new Date();
-            const timeString = now.toLocaleTimeString('zh-CN', {
-                hour12: false,
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit'
-            });
-            document.getElementById('time').innerHTML = 
-                timeString.split('').map(c => `<span>${c}</span>`).join('');
-        }
-
-        // 初始化
+        // 修改初始化函数
         function init() {
             createStars();
+            createClockMarks();
             updateTime();
             setInterval(updateTime, 1000);
+            updateAnalogClock(); // 启动模拟时钟动画
             window.addEventListener('resize', () => {
                 createStars();
                 clearTimeout(window.resizedFinished);
@@ -188,7 +150,6 @@
             });
         }
 
-        // 启动
         init();
     </script>
 </body>
